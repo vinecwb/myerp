@@ -1,11 +1,14 @@
 import { Module } from '@nestjs/common';
-import { CrudController } from './crud.controller';
-import { CrudService } from './crud.service';
+import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database.module';
 
 @Module({
-  imports: [DatabaseModule],
-  controllers: [CrudController],
-  providers: [CrudService],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    DatabaseModule,
+  ],
 })
 export class AppModule {}
+

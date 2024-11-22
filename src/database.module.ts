@@ -1,15 +1,16 @@
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Client } from 'pg';
 
 @Module({})
 export class DatabaseModule {
-  static async connect() {
+  static async connect(configService: ConfigService) {
     const client = new Client({
-      user: 'vinicius.santos', // substitua pelo usuário do seu banco de dados
-      host: 'localhost',
-      database: 'myerp_crud', // nome do banco de dados
-      password: '456789', // substitua pela sua senha
-      port: 5432,
+      user: configService.get<string>('DB_USER'),
+      host: configService.get<string>('DB_HOST'),
+      database: configService.get<string>('DB_NAME'),
+      password: configService.get<string>('DB_PASSWORD'),
+      port: configService.get<number>('DB_PORT'),
     });
 
     await client.connect();
