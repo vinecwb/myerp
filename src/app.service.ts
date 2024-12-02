@@ -26,6 +26,10 @@ export class AppService {
 
     const hashedPassword = await bcrypt.hash(user.password, 10);
 
+    if (!user.role) {
+      user.role = 'cliente';
+    }
+
     const query = `
    INSERT INTO users (name, surname, birthdate, email, phone, cpf, password, role, created_at) 
    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, CURRENT_TIMESTAMP) 
@@ -55,6 +59,13 @@ export class AppService {
     const values = [id];
     const result = await this.client.query(query, values);
     return result.rows[0];
+  }
+
+  async findOneByEmail(email: string) {
+    const query = 'SELECT * FROM users WHERE email = $1';
+    const values = [email];
+    const result = await this.client.query(query, values);
+    return result.rows[0]; 
   }
 
   async update(id: string, user: {
